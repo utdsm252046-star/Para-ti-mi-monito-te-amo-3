@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín? ❤️</title>
+    <style>
+        :root { --color-amor: #ff4b2b; --color-fondo: #fef1f2; }
+        body {
+            background-color: var(--color-fondo);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        /* Tarjeta Principal */
+        #main-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; margin-top: 15vh; z-index: 200;
+            width: 320px; position: relative;
+        }
+
+        #detalles-amor { 
+            display: none; opacity: 0; transition: 1s; width: 90%; 
+            max-width: 600px; text-align: center; overflow-y: auto; 
+            max-height: 95vh; padding: 20px; z-index: 150;
+        }
+
+        /* Botón de Canción */
+        .musica-link {
+            background: #e91e63; color: white; padding: 15px 25px;
+            border-radius: 50px; text-decoration: none; display: inline-flex;
+            align-items: center; gap: 10px; font-weight: bold;
+            margin-bottom: 20px; box-shadow: 0 4px 15px rgba(233,30,99,0.4);
+        }
+
+        #contador {
+            background: white; padding: 15px; border-radius: 15px;
+            margin-bottom: 20px; border: 2px solid #ff85a2; color: #ff416c;
+        }
+
+        /* Botones principales */
+        .btn-container { height: 80px; margin-top: 20px; }
+        button { padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        #si { background: var(--color-amor); color: white; font-size: 1.1rem; }
+        #no { background: #999; color: white; position: fixed; z-index: 1000; transition: all 0.2s linear; }
+
+        /* Galería de 3 fotos */
+        #galeria {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px; margin-top: 20px;
+        }
+        .polaroid {
+            background: white; padding: 10px 10px 25px 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: rotate(-2deg);
+        }
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid img { width: 100%; height: 160px; object-fit: cover; }
+        .polaroid p { font-size: 0.8rem; margin-top: 10px; color: #555; }
+
+        /* Lluvia de cosas */
+        .caer {
+            position: fixed; top: -100px; z-index: 100;
+            pointer-events: none; animation: lluvia linear forwards;
+        }
+        @keyframes lluvia { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="main-card">
+        <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3I2cGprcWVzczdkbWRxY3ZkOGozNHh3Z3ExNGpmOWRkMDhoMHBqcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9vKPqTMtaS9WoyW6OY/giphy.gif" width="120" alt="Monito">
+        <h1 style="color: #ff4b2b;">¿Quieres ser mi San Valentín mi monito hermoso?</h1>
+        <div class="btn-container">
+            <button id="si">¡SÍ, ACEPTO! ❤️</button>
+            <button id="no">No</button>
+        </div>
+    </div>
+
+    <div id="detalles-amor">
+        <h1 style="color: #ff416c; font-size: 2rem;">¡Sabía que dirías que sí monito de mi alma! ❤️</h1>
+        
+        <a href="https://www.youtube.com/watch?v=98Akpf1ph2o" target="_blank" class="musica-link">
+            🎵 ESCUCHA NUESTRA CANCIÓN (Eres)
+        </a>
+
+        <div id="contador">
+            <p style="margin:0; font-size: 0.8rem;">TIEMPO A TU LADO:</p>
+            <h2 id="tiempo-transcurrido" style="margin:5px 0;"></h2>
+        </div>
+
+        <div id="galeria">
+            <div class="polaroid">
+                <img src="mifoto1.jpg" alt="Foto 1">
+                <p>Nuestra primera foto ❤️</p>
+            </div>
+            <div class="polaroid">
+                <img src="mifoto2.jpg" alt="Foto 2">
+                <p>Mi momento favorito ✨</p>
+            </div>
+            <div class="polaroid">
+                <img src="mifoto3.jpg" alt="Foto 3">
+                <p>Por siempre juntos 👫</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN: Cambia tu fecha aquí (Año, Mes-1, Día)
+        // Ejemplo: 15 de Octubre 2024 -> new Date(2024, 9, 15)
+        const fechaInicio = new Date(2024, 4, 18); 
+
+        const btnNo = document.getElementById('no');
+        const btnSi = document.getElementById('si');
+        const detalles = document.getElementById('detalles-amor');
+        const mainCard = document.getElementById('main-card');
+
+        const monitosGifs = [
+            'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWxhamRmaTd6bHd3cXdkeWc0eDJvdXJmcjB4b2l6ajRkYzFwZ3hoYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nWKEngDxJ34UcT9Nqa/giphy.gif',
+            'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGZkdW91NTg0amF5cXQyNWJkZWloNnZpd250bGk3YTVuc3BoMTNjaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fwnGxYMyWjxN9dzpWY/giphy.gif'
+        ];
+
+        // Botón No que huye
+        function moverNo() {
+            const x = Math.random() * (window.innerWidth - btnNo.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btnNo.offsetHeight);
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+        }
+        let intervaloNo = setInterval(moverNo, 800);
+        btnNo.addEventListener('mouseover', moverNo);
+
+        // Al aceptar
+        btnSi.addEventListener('click', () => {
+            clearInterval(intervaloNo);
+            document.body.style.overflow = "auto";
+            mainCard.style.display = 'none';
+            btnNo.style.display = 'none';
+            detalles.style.display = 'block';
+            setTimeout(() => { detalles.style.opacity = '1'; }, 100);
+            
+            // Lluvia de corazones y monitos
+            setInterval(lanzarLluvia, 200);
+            
+            actualizarContador();
+            setInterval(actualizarContador, 1000);
+        });
+
+        function lanzarLluvia() {
+            const esCorazon = Math.random() > 0.4;
+            const el = document.createElement(esCorazon ? 'div' : 'img');
+            
+            if (esCorazon) {
+                el.innerText = '❤️';
+                el.style.fontSize = Math.random() * 20 + 20 + "px";
+            } else {
+                el.src = monitosGifs[Math.floor(Math.random() * monitosGifs.length)];
+                el.style.width = "80px";
+            }
+            
+            el.className = 'caer';
+            el.style.left = Math.random() * 100 + "vw";
+            el.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 5000);
+        }
+
+        function actualizarContador() {
+            const ahora = new Date();
+            const dif = ahora - fechaInicio;
+            const d = Math.floor(dif / (1000 * 60 * 60 * 24));
+            const h = Math.floor((dif / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((dif / 1000 / 60) % 60);
+            const s = Math.floor((dif / 1000) % 60);
+            document.getElementById('tiempo-transcurrido').innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }
+    </script>
+</body>
+</html>
